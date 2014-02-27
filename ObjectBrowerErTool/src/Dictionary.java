@@ -4,31 +4,58 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-
+/**
+ * 辞書クラス　
+ * valueはスネーク記法（にするよてい）
+ * @author Shinji
+ *
+ */
 public class Dictionary {
 
+	//辞書ハッシュマップ
 	private HashMap mDictionary;
+	private String[] mKeyList;
 	
 	public Dictionary(String dictionaryPath){
 		
+		//初期化
 		mDictionary = new HashMap();
 		
 		try {
 			File csv = new File(dictionaryPath);
 			BufferedReader br = new BufferedReader(new FileReader(csv));
 			
+			ArrayList<String> keyList = new ArrayList<String>();
 			String line = "";
 			while( (line = br.readLine()) != null ){
 				String[] temp = line.split(",", -1);
 				temp[0] = temp[0].replace("\"", "");
 				temp[1] = temp[1].replace("\"", "");
 				mDictionary.put(temp[0], temp[1]);
+				keyList.add(temp[0]);
 			}
+			
+			mKeyList = new String[keyList.size()];
+			for (int i = 0; i< keyList.size(); i++){
+				mKeyList[i] = keyList.get(i);
+			}
+			
+			Arrays.sort(mKeyList, new Comparator(){
+				@Override
+				public int compare(Object arg0, Object arg1) {
+					// TODO Auto-generated method stub
+					return ((String)arg1).length() - ((String)arg0).length();
+				}
+			});
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,11 +66,13 @@ public class Dictionary {
 		
 	}
 	
+	//辞書の内容表示
 	public String getvalue(String key){
 		return (String) mDictionary.get(key);
 	}
 	
 	public void print(){
+		
 		Set<Map.Entry<String, String>> entrySet = mDictionary.entrySet();
 		Iterator<Map.Entry<String, String>> it = entrySet.iterator();
 		
@@ -55,6 +84,10 @@ public class Dictionary {
 			
 			System.out.println(key + ":" + mDictionary.get(key));
 		}
+	}
+	
+	public String[] getKeyList(){
+		return mKeyList;
 	}
 	
 }

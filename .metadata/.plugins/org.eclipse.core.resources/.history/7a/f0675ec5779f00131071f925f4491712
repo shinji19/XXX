@@ -1,0 +1,72 @@
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+
+public class ChangeLanguageForXml extends DefaultHandler{
+	
+	private String mResult;
+	
+	public ChangeLanguageForXml(String filePath, String dictionaryPath){
+		
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		XMLEventReader reader = factory.createXMLEventReader();
+				//new ByteArrayInputStream(XML.getBytes("UTF-8")));
+		
+		/*
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			
+			String url = filePath;
+			//DefaultHandler handler = new ObjectBrowserErHandler();
+			
+			parser.parse(new FileInputStream(url), this);
+			
+			
+			
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+	}
+	
+	
+	
+	public void startElement(String namaspaceURI, String localName, String qName, Attributes atts){
+		//System.out.println(qName);
+		if (qName.equals("ATTR")){
+			String pName = atts.getValue("P-NAME");
+			System.out.println(pName);
+		}
+	}
+	
+	public void characters(char[] c, int start, int length){
+		
+		
+		
+		System.out.println(new String(c, start, length));
+		
+	}
+	//public void 
+
+}

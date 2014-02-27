@@ -1,7 +1,11 @@
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-
+/**
+ * ”pŠü‚æ‚Ä‚¢
+ * @author Shinji
+ *
+ */
 public class ObjectBrowserErHandler extends DefaultHandler{
 
 	

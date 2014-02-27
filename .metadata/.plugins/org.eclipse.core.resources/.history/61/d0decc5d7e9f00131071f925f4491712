@@ -1,0 +1,18 @@
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		new ChangeLanguageForXml("./input.edm", "./dictionary.csv", "output.edm");
+		
+		//new Dictionary("./dictionary.csv");
+		
+		String s = "プロジェクトＩＤ";
+		System.out.println(s.contains("プロジェク"));
+	}
+
+}
