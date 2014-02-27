@@ -1,0 +1,46 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+
+public class ChangeLanguageForXml {
+	
+	public ChangeLanguageForXml(String filePath, String dictionaryPath){
+		
+		try {
+			//InputStream inputStream = new FileInputStream("input.edm");
+			//InputSource inputSource = new InputSource(inputStream);
+			
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			//parser.setPr
+			
+			String url = "/input.edm";
+			DefaultHandler handler = new ObjectBrowserErHandler();
+			
+			parser.parse(new FileInputStream(url), handler);
+			
+			
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

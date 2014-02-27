@@ -1,0 +1,20 @@
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
+
+public class ObjectBrowserErHandler extends DefaultHandler{
+
+	public void startElement(String namaspaceURI, String localName, String qName, Attributes atts){
+		
+		System.out.println(atts.getValue(0));
+	}
+	
+	public void characters(char[] c, int start, int length){
+		
+		System.out.print("characters:");
+		
+		System.out.println(new String(c).substring(start, start + length));
+		
+	}
+	
+}

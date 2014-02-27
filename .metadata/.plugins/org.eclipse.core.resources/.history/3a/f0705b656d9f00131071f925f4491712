@@ -1,0 +1,12 @@
+import java.util.HashMap;
+
+
+public class Dictionary {
+
+	private HashMap mDictionary;
+	
+	public Dictionary(String dictionaryPath){
+		mDictionary = new HashMap();
+	}
+	
+}

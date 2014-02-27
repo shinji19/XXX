@@ -1,0 +1,15 @@
+import java.io.File;
+import java.util.HashMap;
+
+
+public class Dictionary {
+
+	private HashMap mDictionary;
+	
+	public Dictionary(String dictionaryPath){
+		File csv = new File(dictionaryPath);
+		BufferedReader br = new BufferedReader(new Reader(csv));
+		mDictionary = new HashMap();
+	}
+	
+}
