@@ -1,0 +1,285 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Namespace;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+
+
+
+//public class ChangeLanguageForXml extends DefaultHandler{
+public class ChangeLanguageForXml{	
+	
+	private Dictionary mDictionary;
+	
+	/**
+	 * 変換する
+	 * @param inputFilePath 入力ファイルパス
+	 * @param outputFileName 出力ファイルパス
+	 * @param dictionaryPath 辞書のファイルパス
+	 */
+	public ChangeLanguageForXml(String inputFilePath, String outputFilePath, Dictionary dictionary){
+		
+		mDictionary = dictionary;
+		
+		StAXVer(inputFilePath, outputFilePath);
+
+		
+	}
+	/*
+	public void bufferedReaderVer(String filePath){
+		String result = "";
+		File file = new File(filePath);
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(filePath));
+			
+			String line = br.readLine();
+			while (line != null){
+				if (line.contains("ATTR") && line.contains("P-NAME")){
+					String[] temp = line.split("P-NAME");
+					//temp[1] = temp[1].concat(str)
+					String s = changeString(temp[1]);
+					
+					line = temp[0] + "P-NAME" + s;
+				}
+				result += line + "\n";
+				
+				line = br.readLine();
+			}
+			
+			br.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(result);
+	}
+	*/
+	
+	/**
+	 * 読み込みしつつ、直しながら書き出す。
+	 * @param inputFilePath 入力edm
+	 * @param outputFilePath 出力edm
+	 */
+	public void StAXVer(String inputFilePath, String outputFilePath){
+
+		try {
+			//入力用
+			InputStream inputStream = new FileInputStream(inputFilePath);
+			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+			XMLEventReader reader = inputFactory.createXMLEventReader(
+					inputStream);
+			
+			//出力用
+			XMLOutputFactory outputFactory = XMLOutputFactory.newFactory();
+			StringWriter stringWriter = new StringWriter();
+			XMLEventWriter writer = outputFactory.createXMLEventWriter(stringWriter);
+			
+			
+			
+			//要素を最後までたどる
+			while (reader.hasNext()){
+				XMLEvent event = reader.nextEvent();
+				if (event.isStartElement()){
+					StartElement startElement = event.asStartElement();
+					event = getConvertStartElement(startElement);
+				}
+
+				
+				writer.add(event);
+			}
+			writer.close();
+			
+			//System.out.println(stringWriter.toString());
+			
+			
+
+			FileOutputStream outputStream = new FileOutputStream(outputFilePath);
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
+			
+			outputStreamWriter.write(stringWriter.toString());
+			outputStreamWriter.flush();
+			outputStreamWriter.close();
+			outputStream.close();
+			
+			
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
+	/**
+	 * for StAX
+	 */
+	/*
+	public void startElement(String namaspaceURI, String localName, String qName, Attributes atts){
+		//System.out.println(qName);
+		if (qName.equals("ATTR")){
+			String pName = atts.getValue("P-NAME");
+			System.out.println(pName);
+		}
+	}*/
+	
+	/**
+	 * for StAX
+	 */
+	/*
+	public void characters(char[] c, int start, int length){
+		
+		
+		
+		System.out.println(new String(c, start, length));
+		
+	}*/
+
+	private StartElement getConvertStartElement(StartElement startElement){
+		
+		//出力用
+		StartElement result = startElement;
+		
+		//おまじない
+		XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+		
+		//startElement.getName().getLocalPart()
+		//を使うとうまくいきました
+		//理由は分かりません m(_ _)m
+		QName qName = startElement.getName();
+		//変更が必要なタグを見つけたとき
+		if (startElement.getName().getLocalPart().equals("ATTR") ||
+				startElement.getName().getLocalPart().equals("ENTITY") ||
+				startElement.getName().getLocalPart().equals("RELATION") ||
+				startElement.getName().getLocalPart().equals("INDEX")){
+			
+			//Attribute attribute = startElement.getAttributeByName(new QName("P-NAME"));
+			
+			//System.out.println(reader.get);
+			
+			String prefix = startElement.getName().getPrefix();
+			String uri = startElement.getNamespaceURI(prefix);
+			String localName = startElement.getName().getLocalPart();
+			Iterator<Attribute> attributes = startElement.getAttributes();
+			Iterator<Namespace> namespaces = startElement.getNamespaces();
+			NamespaceContext context = startElement.getNamespaceContext();
+			
+			ArrayList<Attribute> list = new ArrayList<Attribute>();
+			for (Iterator<Attribute> i = attributes; i.hasNext();){
+				Attribute att = i.next();
+				if (att.getName().getLocalPart().equals("P-NAME")){
+					list.add(eventFactory.createAttribute(prefix, uri, "P-NAME", convertToERCase(att.getValue())));
+				}
+				else list.add(att);
+				//System.out.println(att.getName().getLocalPart().equals("P-NAME"));
+			}
+			
+			attributes = list.iterator();
+			
+			result = eventFactory.createStartElement(prefix, uri, localName, attributes, namespaces, context);				
+		}
+		
+		return result;
+	}
+
+	/**
+	 * 文字列sを命名規則に則った文字列にする
+	 * @param s 入力文字列
+	 * @return 規則にのっとった文字列
+	 */
+	private String convertToERCase(String s){
+		String result;
+		result = convertBasedOnDictionary(s);
+		result = convertToSnakeCaseFromCamelCase(result);
+		
+		return result;
+	}
+	
+	/**
+	 * キャメル記法をスネーク記法にする
+	 * 
+	 * @param s キャメル記法の文字列
+	 * @return スネーク記法の文字列
+	 */
+	private String convertToSnakeCaseFromCamelCase(String s){
+
+		String result;
+		
+		if (s.length() == 0) return "";
+		
+		//int codeOfa = "a".charAt(0);
+		//int codeOfz = "z".charAt(0);
+		result = s.charAt(0) + "";
+		for (int i = 1; i < s.length(); i++){
+			if ((s.charAt(i) + "").matches("[a-z]+")){
+			//if (s.charAt(i) < codeOfa || codeOfz < s.charAt(i) ){
+				result += (s.charAt(i)+"").toUpperCase();
+			}
+			else if ((s.charAt(i) + "").matches("[A-Z]+")){
+				result += "_" + s.charAt(i);
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 辞書に基づいてsを変更
+	 * @param s	入力文字列
+	 * @return 辞書に基づいて変換された文字列
+	 */
+	private String convertBasedOnDictionary(String s){
+		String[] key = mDictionary.getKeys();
+		
+		//辞書に基づいて変換
+		String result = new String(s);
+		for (int i = 0; i < key.length; i++){
+			if (result.contains(key[i])){
+				result = result.replace(key[i], mDictionary.getValue(key[i]));
+			}
+		}
+		
+		return result;
+	}
+
+	private void preProcessing(String s){
+		boolean flag = false;
+		for (int i = 0; i < s.length(); i++){
+			if ( (s.charAt(i)+"").matches("[A-Z]"+) 
+		}
+	}
+	
+}

@@ -1,2 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="javax.xml.parsers.SAXParserFactory"/>
+<fullyQualifiedTypeName name="javax.xml.parsers.SAXParser"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="org.xml.sax.InputSource"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.io.Reader"/>
+<fullyQualifiedTypeName name="java.util.Set"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="java.util.Map.Entry"/>
+<fullyQualifiedTypeName name="java.io.ByteArrayInputStream"/>
+<fullyQualifiedTypeName name="org.xml.sax.helpers.DefaultHandler"/>
+<fullyQualifiedTypeName name="javax.xml.stream.XMLInputFactory"/>
+<fullyQualifiedTypeName name="javax.xml.stream.XMLEventReader"/>
+<fullyQualifiedTypeName name="org.xml.sax.Attributes"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="javax.xml.stream.events.XMLEvent"/>
+<fullyQualifiedTypeName name="javax.xml.stream.events.StartElement"/>
+<fullyQualifiedTypeName name="javax.xml.namespace.QName"/>
+<fullyQualifiedTypeName name="javax.xml.stream.events.Attribute"/>
+<fullyQualifiedTypeName name="javax.xml.stream.XMLOutputFactory"/>
+<fullyQualifiedTypeName name="java.io.StringWriter"/>
+<fullyQualifiedTypeName name="javax.xml.stream.XMLEventWriter"/>
+<fullyQualifiedTypeName name="javax.xml.stream.XMLEventFactory"/>
+<fullyQualifiedTypeName name="java.io.FileReader"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="java.util.Comparator"/>
+</qualifiedTypeNameHistroy>

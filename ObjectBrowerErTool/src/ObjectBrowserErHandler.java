@@ -14,6 +14,9 @@ public class ObjectBrowserErHandler extends DefaultHandler{
 		if (qName.equals("ATTR")){
 			String pName = atts.getValue("P-NAME");
 			System.out.println(pName);
+			
+			
+			
 		}
 	}
 	
